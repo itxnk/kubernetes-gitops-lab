@@ -1,0 +1,14 @@
+name: Validate Kubernetes manifests
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate YAML and Kustomize build
+        run: |
+          kubectl kustomize k8s/overlays/dev > /tmp/rendered.yaml
+          test -s /tmp/rendered.yaml
